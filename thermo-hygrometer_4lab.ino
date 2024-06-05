@@ -43,7 +43,17 @@ const int OLED_WIDTH = 128;    // 幅
 const int OLED_HEIGHT = 64;    // 高さ
 const int Wire1_I2C_SDA = 19;  // SDA pin
 const int Wire1_I2C_SCL = 18;  // SCL pin
-Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1);
+#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1, OLED_RESET);
+// Color definitions
+#define BLACK 0x0000
+#define BLUE 0x001F
+#define RED 0xF800
+#define GREEN 0x07E0
+#define CYAN 0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW 0xFFE0
+#define WHITE 0xFFFF
 
 /* FOR W-Fi */
 // wifi info (from wifi_credentials.h)
@@ -135,6 +145,7 @@ void ShowTempHumid(float fukai, long rssi) {
   display.setCursor(0, 0);
   display.print(year[0]);
   display.print(date);
+  display.print(F(" "));
   display.println(hour_minute);
 
   display.print(F("RSSI: "));
@@ -170,9 +181,10 @@ void ShowTempHumid(float fukai, long rssi) {
   } else {
     display.setTextColor(RED);
   }
+  display.println((int16_t)fukai);
 
-  display.println(fukai);
   display.display();
+  Serial.println(F("[OLED] Display updated"));
 }
 
 void SendToAmbient(void) {
@@ -268,7 +280,8 @@ void setup(void) {
     Serial.println(F("!ERROR: [OLED] FAILED to initiate SSD1306"));
   } else {
     Serial.println(F(" [OLED] Initiated OLED display SSD1306"));
-    display.cp437(true);
+    display.display(); // initial logo
+    // display.cp437(true);
   }
 
   // NTP setting
