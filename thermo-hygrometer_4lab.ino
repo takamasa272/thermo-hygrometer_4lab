@@ -155,7 +155,9 @@ void ShowTempHumid(float fukai, long rssi) {
   display.setTextSize(2);
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
-    display.printf(" %cC\n", 0xF8);
+    display.print(F(" "));
+    display.write(0xF8) // degree sign
+    display.println(F("C"));
   } else {
     display.println(F("ERROR"));
   }
@@ -282,7 +284,7 @@ void setup(void) {
   } else {
     Serial.println(F(" [OLED] Initiated OLED display SSD1306"));
     display.display(); // initial logo
-    // display.cp437(true);
+    display.cp437(true); // for bug cp437
   }
 
   // NTP setting
