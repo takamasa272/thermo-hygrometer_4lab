@@ -210,7 +210,8 @@ void SendToGoogleApps(void) {
   String payload;
   if (httpCode > 0) {
     payload = http.getString();
-    Serial.println(" [GAS] Payload: " + payload);
+    Serial.print(F(" [GAS] Payload: "));
+    Serial.println(payload);
   }
   //---------------------------------------------------------------------
   http.end();
@@ -223,7 +224,7 @@ void setup(void) {
   Serial.print(F("Hello! AHT25 Thermo-hygrometer"));
 
   // wifi connect
-  Serial.println("");
+  Serial.println(F(""));
   Serial.print(F("[Wi-Fi] Try connecting to "));
   Serial.println(ssid);
 
@@ -287,7 +288,7 @@ void setup(void) {
   // NTP setting
   configTime(9 * 3600L, 0, "ntp.nict.jp", "time.google.com", "ntp.jst.mfeed.ad.jp");
 
-  Serial.println(" [NTP] NTP has configured");
+  Serial.println(F(" [NTP] NTP has configured"));
 
   //  チャネルIDとライトキーを指定してAmbientの初期化
   if (ENABLE_AMBIENT) ambient.begin(channelId, writeKey, &client);
@@ -300,7 +301,7 @@ void loop() {
   if ((WiFi.status() == WL_CONNECTED)) {
     // measure Temperature and humidity
     updateAht25();
-    Serial.println("[AHT25] Measured");
+    Serial.println(F("[AHT25] Measured"));
 
     delay(30);
 
@@ -308,9 +309,9 @@ void loop() {
 
     // wifi connected
     long rssi = WiFi.RSSI();  // rcvd sig strength indicator [dBm]
-    Serial.print("[Wi-Fi] RSSI: ");
+    Serial.print(F("[Wi-Fi] RSSI: "));
     Serial.print(rssi);
-    Serial.println("dBm");
+    Serial.println(F("dBm"));
 
     ShowTempHumid(fukai, rssi);
 
