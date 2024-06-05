@@ -1,5 +1,6 @@
 # thermo-hygrometer
 ESP32 + AHT25
+(+ SSD1306 OLED Display)
 
 Wi-Fi接続し，AHT25から温湿度を取得，AmbientやGoogle Apps Script にロギングしていく．
 
