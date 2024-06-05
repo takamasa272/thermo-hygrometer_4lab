@@ -43,8 +43,9 @@ const int OLED_WIDTH = 128;    // 幅
 const int OLED_HEIGHT = 64;    // 高さ
 const int Wire1_I2C_SDA = 19;  // SDA pin
 const int Wire1_I2C_SCL = 18;  // SCL pin
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define OLED_RESET -1          // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1, OLED_RESET);
+// Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1);
 // Color definitions
 #define BLACK 0x0000
 #define BLUE 0x001F
@@ -143,47 +144,50 @@ void ShowTempHumid(float fukai, long rssi) {
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0, 0);
-  display.print(year[0]);
-  display.print(date);
-  display.print(F(" "));
-  display.println(hour_minute);
+  display.print("Hello");
+  // display.print(year[0]);
+  // display.print(date);
+  // display.print(F(" "));
+  // display.println(hour_minute);
 
-  display.print(F("RSSI: "));
-  display.print(rssi);
-  display.println(F(" dBm"));
+  // display.setTextColor(CYAN);
+  // display.print(F("Wi-Fi RSSI: "));
+  // display.print(rssi);
+  // display.println(F(" dBm"));
 
-  display.setTextSize(2);
-  if (temperature != ERROR_VALUE) {
-    display.print(temperature, 2);  // (temp, 小数点以下桁数)
-    display.print(F(" "));
-    display.write(0xF8); // degree sign
-    display.println(F("C"));
-  } else {
-    display.println(F("ERROR"));
-  }
+  // display.setTextColor(WHITE);
+  // display.setTextSize(2);
+  // if (temperature != ERROR_VALUE) {
+  //   display.print(temperature, 2);  // (temp, 小数点以下桁数)
+  //   display.print(F(" "));
+  //   display.write(0xF8); // degree sign
+  //   display.println(F("C"));
+  // } else {
+  //   display.println(F("ERROR"));
+  // }
 
-  if (humidity != ERROR_VALUE) {
-    display.print(humidity, 2);
-    display.println(F(" %"));
-  } else {
-    display.println("ERROR");
-  }
-  display.print(F("Fukai: "));
+  // if (humidity != ERROR_VALUE) {
+  //   display.print(humidity, 2);
+  //   display.println(F(" %"));
+  // } else {
+  //   display.println("ERROR");
+  // }
 
-  if (fukai <= 55) {
-    display.setTextColor(BLUE);
-  } else if (fukai <= 60) {
-    display.setTextColor(CYAN);
-  } else if (fukai <= 70) {
-    display.setTextColor(GREEN);
-  } else if (fukai <= 80) {
-    display.setTextColor(YELLOW);
-  } else if (fukai <= 85){
-    display.setTextColor(MAGENTA);
-  } else {
-    display.setTextColor(RED);
-  }
-  display.println((int16_t)fukai);
+  // display.print(F("Fukai: "));
+  // if (fukai <= 55) {
+  //   display.setTextColor(BLUE);
+  // } else if (fukai <= 60) {
+  //   display.setTextColor(CYAN);
+  // } else if (fukai <= 70) {
+  //   display.setTextColor(GREEN);
+  // } else if (fukai <= 80) {
+  //   display.setTextColor(YELLOW);
+  // } else if (fukai <= 85){
+  //   display.setTextColor(MAGENTA);
+  // } else {
+  //   display.setTextColor(RED);
+  // }
+  // display.println((int16_t)fukai);
 
   display.display();
   Serial.println(F("[OLED] Display updated"));
@@ -283,8 +287,8 @@ void setup(void) {
     Serial.println(F("!ERROR: [OLED] FAILED to initiate SSD1306"));
   } else {
     Serial.println(F(" [OLED] Initiated OLED display SSD1306"));
-    display.display(); // initial logo
-    display.cp437(true); // for bug cp437
+    display.display();    // initial logo
+    display.cp437(true);  // for bug cp437
   }
 
   // NTP setting
