@@ -144,13 +144,7 @@ void ShowTempHumid(float fukai, long rssi) {
   display.setTextSize(2);
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
-
-    // display "℃"
-    display.print(F(" "));
-    display.setTextSize(1);
-    display.print(F("o"));
-    display.setTextSize(2);
-    display.println(F("C"));
+    display.printf(" %cC\n", 0xF8);
   } else {
     display.println(F("ERROR"));
   }
@@ -162,6 +156,21 @@ void ShowTempHumid(float fukai, long rssi) {
     display.println("ERROR");
   }
   display.print(F("Fukai: "));
+
+  if (fukai <= 55) {
+    display.setTextColor(BLUE);
+  } else if (fukai <= 60) {
+    display.setTextColor(CYAN);
+  } else if (fukai <= 70) {
+    display.setTextColor(GREEN);
+  } else if (fukai <= 80) {
+    display.setTextColor(YELLOW);
+  } else if (fukai <= 85){
+    display.setTextColor(MAGENTA);
+  } else {
+    display.setTextColor(RED);
+  }
+
   display.println(fukai);
   display.display();
 }
@@ -259,6 +268,7 @@ void setup(void) {
     Serial.println(F("!ERROR: [OLED] FAILED to initiate SSD1306"));
   } else {
     Serial.println(F(" [OLED] Initiated OLED display SSD1306"));
+    display.cp437(true);
   }
 
   // NTP setting
