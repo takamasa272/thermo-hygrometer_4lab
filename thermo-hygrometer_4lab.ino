@@ -156,7 +156,7 @@ void ShowTempHumid(float fukai, long rssi) {
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
     display.print(F(" "));
-    display.write(0xF8) // degree sign
+    display.write(0xF8); // degree sign
     display.println(F("C"));
   } else {
     display.println(F("ERROR"));
