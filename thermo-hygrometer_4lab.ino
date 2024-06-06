@@ -143,6 +143,7 @@ void ShowTempHumid(float fukai, long rssi) {
   display.print(rssi);
   display.println(F(" dBm"));
   
+  display.setCursor(0, 20);
   display.setTextSize(2);
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
@@ -160,7 +161,9 @@ void ShowTempHumid(float fukai, long rssi) {
     display.println("ERROR");
   }
 
-  display.print(F("Fukai:"));
+  display.setTextSize(1);
+  display.setCursor(0, 56);
+  display.print(F("Fukai index: "));
   display.println((int16_t)fukai);
 
   display.display();
