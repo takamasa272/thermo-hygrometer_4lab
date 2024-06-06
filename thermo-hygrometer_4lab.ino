@@ -45,16 +45,6 @@ const int Wire1_I2C_SDA = 19;  // SDA pin
 const int Wire1_I2C_SCL = 18;  // SCL pin
 #define OLED_RESET -1          // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1, OLED_RESET);
-// Adafruit_SSD1306 display(OLED_WIDTH, OLED_HEIGHT, &Wire1);
-// Color definitions
-#define BLACK 0x0000
-#define BLUE 0x001F
-#define RED 0xF800
-#define GREEN 0x07E0
-#define CYAN 0x07FF
-#define MAGENTA 0xF81F
-#define YELLOW 0xFFE0
-#define WHITE 0xFFFF
 
 /* FOR W-Fi */
 // wifi info (from wifi_credentials.h)
@@ -144,50 +134,35 @@ void ShowTempHumid(float fukai, long rssi) {
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0, 0);
-  display.print("Hello");
-  // display.print(year[0]);
-  // display.print(date);
-  // display.print(F(" "));
-  // display.println(hour_minute);
+  display.print(year[0]);
+  display.print(date);
+  display.print(F(" "));
+  display.println(hour_minute);
 
-  // display.setTextColor(CYAN);
-  // display.print(F("Wi-Fi RSSI: "));
-  // display.print(rssi);
-  // display.println(F(" dBm"));
+  display.print(F("Wi-Fi RSSI: "));
+  display.print(rssi);
+  display.println(F(" dBm"));
+  display.println(F(""));
 
-  // display.setTextColor(WHITE);
-  // display.setTextSize(2);
-  // if (temperature != ERROR_VALUE) {
-  //   display.print(temperature, 2);  // (temp, 小数点以下桁数)
-  //   display.print(F(" "));
-  //   display.write(0xF8); // degree sign
-  //   display.println(F("C"));
-  // } else {
-  //   display.println(F("ERROR"));
-  // }
+  display.setTextSize(2);
+  if (temperature != ERROR_VALUE) {
+    display.print(temperature, 2);  // (temp, 小数点以下桁数)
+    display.print(F(" "));
+    display.write(0xF8); // degree sign
+    display.println(F("C"));
+  } else {
+    display.println(F("ERROR"));
+  }
 
-  // if (humidity != ERROR_VALUE) {
-  //   display.print(humidity, 2);
-  //   display.println(F(" %"));
-  // } else {
-  //   display.println("ERROR");
-  // }
+  if (humidity != ERROR_VALUE) {
+    display.print(humidity, 2);
+    display.println(F(" %"));
+  } else {
+    display.println("ERROR");
+  }
 
-  // display.print(F("Fukai: "));
-  // if (fukai <= 55) {
-  //   display.setTextColor(BLUE);
-  // } else if (fukai <= 60) {
-  //   display.setTextColor(CYAN);
-  // } else if (fukai <= 70) {
-  //   display.setTextColor(GREEN);
-  // } else if (fukai <= 80) {
-  //   display.setTextColor(YELLOW);
-  // } else if (fukai <= 85){
-  //   display.setTextColor(MAGENTA);
-  // } else {
-  //   display.setTextColor(RED);
-  // }
-  // display.println((int16_t)fukai);
+  display.print(F("Fukai:"));
+  display.println((int16_t)fukai);
 
   display.display();
   Serial.println(F("[OLED] Display updated"));
