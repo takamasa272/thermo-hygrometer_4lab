@@ -142,8 +142,7 @@ void ShowTempHumid(float fukai, long rssi) {
   display.print(F("Wi-Fi RSSI: "));
   display.print(rssi);
   display.println(F(" dBm"));
-  display.println(F(""));
-
+  
   display.setTextSize(2);
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
