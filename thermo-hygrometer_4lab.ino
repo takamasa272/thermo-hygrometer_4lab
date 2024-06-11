@@ -1,25 +1,24 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
 #include <time.h>
-
 #include <WiFi.h>
-
-#include "wifi_credentials.h"     // SSID, EAP_ID, EAP_USERNAME and EAP_PASSWORD
-#include "ambient_credentials.h"  // keys for ambient
-#include "gas_credentials.h"      // keys for Google Apps Script
-
 #include <CRC8.h>              // for AHT25
 #include <Wire.h>              // for AHT25, SSD1306
 #include <Adafruit_SSD1306.h>  // SSD1306 display
 #include <Adafruit_GFX.h>      // SSD1306 display
 #include <Ambient.h>
 
+/* headerfile for secrets */
+#include "wifi_credentials.h"     // SSID, EAP_ID, EAP_USERNAME and EAP_PASSWORD
+#include "ambient_credentials.h"  // keys for ambient
+#include "gas_credentials.h"      // keys for Google Apps Script
+
 /* ENABLE/DISABLE FEATURES */
 // send data to ambient
 const bool ENABLE_AMBIENT = false;
 // send data to google apps script
 const bool ENABLE_GAS = false;
-// use WPA2 Enterprise 802.1X authentication
+// use WPA2 Enterprise (802.1X authentication)
 const bool ENABLE_8021X = true;
 
 /* FOR SENSOR AHT25 */
