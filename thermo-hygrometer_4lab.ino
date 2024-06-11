@@ -3,12 +3,6 @@
 #include <time.h>
 
 #include <WiFi.h>
-#include "esp_wifi.h"
-// for 802.1X authentication
-#include "esp_eap_client.h"
-// #include "esp_wpa2.h"
-// #include <SPI.h> // for WiFiNINA.h?
-// #include <WiFiNINA.h>
 
 #include "wifi_credentials.h"     // SSID, EAP_ID, EAP_USERNAME and EAP_PASSWORD
 #include "ambient_credentials.h"  // keys for ambient
@@ -26,7 +20,7 @@ const bool ENABLE_AMBIENT = false;
 // send data to google apps script
 const bool ENABLE_GAS = false;
 // use WPA2 Enterprise 802.1X authentication
-const bool ENABLE_8021X = false;
+const bool ENABLE_8021X = true;
 
 /* FOR SENSOR AHT25 */
 const int Wire_I2C_SDA = 15;
@@ -53,7 +47,6 @@ const char* ssid = WIFI_SSID;
 // #define EAP_ID "youruserid" // for WPA2-EAP
 // #define EAP_USERNAME "youruserid"
 // #define EAP_PASSWORD "yourpassword"
-esp_eap_ttls_phase2_types ttlsPhase2Type = ESP_EAP_TTLS_PHASE2_MSCHAPV2;
 
 const char* password = WIFI_PASS;  // for WPA2-PSK
 
@@ -73,6 +66,42 @@ char year[4][6];
 char date[20], hour_minute[20];
 
 bool kougo;
+
+void initWiFi(void){
+  Serial.print(F("[Wi-Fi] Try connecting to "));
+  Serial.println(ssid);
+
+  WiFi.disconnect();
+  WiFi.mode(WIFI_MODE_STA); //init wifi mode
+
+  if (ENABLE_8021X) {
+    // WPA2 Enterprise
+    WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_ID, EAP_USERNAME, EAP_PASSWORD); //without CERTIFICATE
+  } else {
+    // WPA2 Personal
+    WiFi.begin(ssid, password);
+  } 
+  Serial.println(F(" [Wi-Fi] Try connecting to WiFi.."));
+  int i=0;
+  while (WiFi.status() != WL_CONNECTED) {
+    ++i;
+    if (i % 50 != 0){
+      Serial.print(F("."));  
+    } else {
+      Serial.println(F("."));
+    }
+    delay(10);
+  }
+
+  Serial.println(F(""));
+  Serial.println(F(" [Wi-Fi] Connected to the WiFi network"));
+  Serial.print(F("  IP: "));
+  Serial.println(WiFi.localIP());
+  if (ENABLE_8021X) {
+    Serial.print(F("  User ID: "));
+    Serial.println(EAP_USERNAME);
+  }
+}
 
 void initAht25(void) {
   delay(100);
@@ -142,13 +171,13 @@ void ShowTempHumid(float fukai, long rssi) {
   display.print(F("Wi-Fi RSSI: "));
   display.print(rssi);
   display.println(F(" dBm"));
-  
+
   display.setCursor(0, 20);
   display.setTextSize(2);
   if (temperature != ERROR_VALUE) {
     display.print(temperature, 2);  // (temp, 小数点以下桁数)
     display.print(F(" "));
-    display.write(0xF8); // degree sign
+    display.write(0xF8);  // degree sign
     display.println(F("C"));
   } else {
     display.println(F("ERROR"));
@@ -204,53 +233,11 @@ void SendToGoogleApps(void) {
 void setup(void) {
   Serial.begin(115200);
   delay(10);
-  Serial.print(F("Hello! AHT25 Thermo-hygrometer"));
-
-  // wifi connect
+  Serial.println(F("Hello! AHT25 Thermo-hygrometer"));
   Serial.println(F(""));
-  Serial.print(F("[Wi-Fi] Try connecting to "));
-  Serial.println(ssid);
 
-  WiFi.disconnect(true);
-  Serial.println(F("DEBUG 1 [Wi-Fi] disconnected"));
-  WiFi.mode(WIFI_STA);  //init wifi mode
-  // WiFi.mode(WIFI_IF_STA);  //init wifi mode
-  if (ENABLE_8021X) {
-    // For "esp_wpa2.h"
-    // esp_wifi_sta_wpa2_ent_set_identity((uint8_t*)EAP_ID, strlen(EAP_ID));
-    // esp_wifi_sta_wpa2_ent_set_username((uint8_t*)EAP_USERNAME, strlen(EAP_USERNAME));
-    // esp_wifi_sta_wpa2_ent_set_password((uint8_t*)EAP_PASSWORD, strlen(EAP_PASSWORD));
-    // esp_wifi_sta_wpa2_ent_enable();
-
-    // OR For "esp_eap_client.h"
-    Serial.println(F("DEBUG 2 [Wi-Fi] begin to initiate EAP client"));
-    esp_eap_client_set_identity((uint8_t*)EAP_ID, strlen(EAP_ID));              //provide identity
-    esp_eap_client_set_username((uint8_t*)EAP_USERNAME, strlen(EAP_USERNAME));  //provide username
-    esp_eap_client_set_password((uint8_t*)EAP_PASSWORD, strlen(EAP_PASSWORD));  //provide password
-    esp_eap_client_set_ttls_phase2_method(ttlsPhase2Type);
-    Serial.println(F("DEBUG 2.5 [Wi-Fi] korekara Set up EAP"));
-    esp_wifi_sta_enterprise_enable();
-    Serial.println(F("DEBUG 3 [Wi-Fi] Set up EAP"));
-    WiFi.begin(ssid);
-  } else {
-    WiFi.begin(ssid, password);
-  }
-  // WiFi.beginEnterprise(ssid, EAP_USERNAME, EAP_USERNAME, EAP_ID);
-  Serial.println(F("DEBUG 4 [Wi-Fi] Wifi began"));
-
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.println(F(" [Wi-Fi] Try connecting to WiFi.."));
-    delay(1000);
-  }
-
-  Serial.println(F(""));
-  Serial.println(F(" [Wi-Fi] Connected to the WiFi network"));
-  Serial.print(F("  IP: "));
-  Serial.println(WiFi.localIP());
-  if (ENABLE_8021X) {
-    Serial.print(F("  User ID: "));
-    Serial.println(EAP_USERNAME);
-  }
+  /* Wi-Fi connect */
+  initWiFi();
 
   /* Initiate AHT25 */
   Wire.begin(Wire_I2C_SDA, Wire_I2C_SCL);
