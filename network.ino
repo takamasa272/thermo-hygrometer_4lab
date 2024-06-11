@@ -39,7 +39,7 @@ void initWiFi(void) {
 
   if (ENABLE_8021X) {
     // WPA2 Enterprise
-    WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_ID, EAP_USERNAME, EAP_PASSWORD);  //without CERTIFICATE
+    WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_ID, EAP_ID, EAP_PASSWORD);  //without CERTIFICATE
   } else {
     // WPA2 Personal
     WiFi.begin(ssid, password);
@@ -61,8 +61,8 @@ void initWiFi(void) {
   Serial.print(F("  IP: "));
   Serial.println(WiFi.localIP());
   if (ENABLE_8021X) {
-    Serial.print(F("  User ID: "));
-    Serial.println(EAP_USERNAME);
+    Serial.print(F("  ID: "));
+    Serial.println(EAP_ID);
   }
 }
 
