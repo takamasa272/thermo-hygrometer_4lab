@@ -11,3 +11,18 @@ SSIDとパスワードなどのクレデンシャル情報は`wifi_credentials.h
 このファイルは`.gitignore`で同期しないようになっている．（インシデントは良くないので）
 
 雛形は `wifi_credentials.h.sample` 等の`.sample`に掲示するので，適宜内容を変更の上，`wifi_credentials.h`にリネームすることで使用可能と思われる．
+
+# ファイル構造
+```
+thermo-hygrometer_4lab/
+├── aht25.ino
+├── ambient_credentials.h
+├── ambient_credentials.h.sample
+├── gas_credentials.h
+├── gas_credentials.h.sample
+├── network.ino
+├── oled_ssd1306.ino
+├── thermo-hygrometer_4lab.ino
+├── wifi_credentials.h
+└── wifi_credentials.h.sample
+```
