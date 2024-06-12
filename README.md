@@ -15,14 +15,15 @@ SSIDとパスワードなどのクレデンシャル情報は`wifi_credentials.h
 # ファイル構造
 ```
 thermo-hygrometer_4lab/
-├── aht25.ino
+│
 ├── ambient_credentials.h
-├── ambient_credentials.h.sample
 ├── gas_credentials.h
-├── gas_credentials.h.sample
-├── network.ino
-├── oled_ssd1306.ino
-├── thermo-hygrometer_4lab.ino
 ├── wifi_credentials.h
-└── wifi_credentials.h.sample
+│
+├── thermo-hygrometer_4lab.ino
+├── oled_ssd1306.ino
+├── aht25.ino
+└── network.ino
+
+また，`GoogleAppsScript_code.gs` をgoogle Spreadsheetにてgoogle Apps Scriptにコピーし，デプロイし，urlを`gas_credentials.h`にしるすをとでスプレッドシートにロギングできる．
 ```
